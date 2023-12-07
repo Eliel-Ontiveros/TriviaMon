@@ -1,0 +1,10 @@
+﻿  AssetManager.cpp
+  Collision.cpp
+  ECS.cpp
+  Game.cpp
+  main.cpp
+  Map.cpp
+  TextureManager.cpp
+  Vector2D.cpp
+  Generando código...
+  BirchEngine.vcxproj -> C:\Users\Eliel\Source\Repos\BirchEngine\bin\x64\Debug\BirchEngine.exe
