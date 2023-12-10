@@ -7,9 +7,9 @@
 
 class AssetManager;
 class ColliderComponent;
-
 class Game
 {
+
 public:
 	Game();
 	~Game();
@@ -27,8 +27,12 @@ public:
 	static bool isRunning;
 	static SDL_Rect camera;
 	static AssetManager* assets;
+	static SDL_Rect Message_rect;
+
+
 	enum groupLabels : std::size_t
 	{
+		groupnpc,
 		groupMap,
 		groupPlayers,
 		groupColliders,
@@ -39,4 +43,8 @@ private:
 
 	int cnt = 0;
 	SDL_Window *window;
+	void handleNPCInteraction();
+	void initializeFont();
+	void cleanupFont();
+
 };

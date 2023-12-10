@@ -7,8 +7,8 @@
 class KeyboardController : public Component
 {
 public:
-	TransformComponent *transform;
-	SpriteComponent *sprite;
+	TransformComponent* transform;
+	SpriteComponent* sprite;
 
 	void init() override
 	{
@@ -18,6 +18,7 @@ public:
 
 	void update() override
 	{
+		// Manejar eventos de teclado
 		if (Game::event.type == SDL_KEYDOWN)
 		{
 			switch (Game::event.key.keysym.sym)
@@ -43,7 +44,7 @@ public:
 				break;
 			}
 		}
-	
+
 		if (Game::event.type == SDL_KEYUP)
 		{
 			switch (Game::event.key.keysym.sym)
@@ -71,5 +72,14 @@ public:
 				break;
 			}
 		}
+
+
+	}
+
+	// Función que se llama cuando se hace clic en la entidad asociada
+	void onClick()
+	{
+		// Lógica para manejar el clic
+		std::cout << "Entity Clicked!" << std::endl;
 	}
 };
