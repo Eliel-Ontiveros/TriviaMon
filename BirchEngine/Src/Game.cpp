@@ -237,7 +237,37 @@ void Game::handleNPCInteraction()
 	SDL_Color white = { 255, 255, 255, 255 };
 	textEntity.addComponent<TransformComponent>(900.0f, 700.0f, 32, 32, 4);
 	textEntity.getComponent<UILabel>().SetLabelText("Hola, ¿crees poder pasar mi examen?", "arial");
-	
+	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
+	{
+		assets->AddTexture("test", "assets/test.png");
+		SDL_Texture* menuTexture = assets->GetTexture("test");
+
+		if (menuTexture)
+		{
+			std::cout << "Texture loaded successfully!" << std::endl;
+
+			bool waitForClick = true;
+
+			while (waitForClick)
+			{
+				SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
+				SDL_RenderPresent(renderer);
+
+				SDL_PollEvent(&event);
+
+				if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
+				{
+					waitForClick = false;
+				}
+			}
+		}
+		else
+		{
+			std::cerr << "Error loading texture!" << std::endl;
+		}
+	}
+
+
 	check = true;
 }
 
