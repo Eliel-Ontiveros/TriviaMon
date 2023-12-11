@@ -17,7 +17,7 @@ SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 SDL_Texture* videoTexture = nullptr;
 
-SDL_Rect Game::camera = { 0,0,800,640 };
+SDL_Rect Game::camera = { 0,0,1200,650 };
 
 SDL_Rect Game::Message_rect = { 0, 0, 0, 0 };
 
@@ -178,14 +178,14 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		std::cout << "Error : SDL_TTF" << std::endl;
 	}
 
-	assets->AddTexture("terrain", "assets/terrain_ss.png");
+	assets->AddTexture("terrain", "assets/terrain_ss2.png");
 	assets->AddTexture("player", "assets/test5.png");
 	assets->AddTexture("projectile", "assets/proj.png");
 	assets->AddTexture("npc", "assets/npc.png");
 	assets->AddFont("arial", "assets/arial.ttf", 16);
 	assets->AddTexture("menu", "assets/menu.png");
 
-	map = new Map("terrain", 3, 32);
+	map = new Map("terrain", 2, 32);
 
 	map->LoadMap("assets/map.map", 25, 20);
 
@@ -219,11 +219,13 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	Vector2D npcPos = npc.getComponent<TransformComponent>().position;
 	textEntity.addComponent<UILabel>(20, 20, "Hello, World!", "arial", white);
 
+	/*
 	assets->CreateProjectile(Vector2D(600, 600), Vector2D(2,0),200, 2, "projectile");
 	assets->CreateProjectile(Vector2D(600, 620), Vector2D(2, 0), 200, 2, "projectile");
 	assets->CreateProjectile(Vector2D(400, 600), Vector2D(2, 1), 200, 2, "projectile");
 	assets->CreateProjectile(Vector2D(600, 600), Vector2D(2, -1), 200, 2, "projectile");
 	assets->AddTexture("menu", "assets/menu.png");
+	*/
 
 }
 
