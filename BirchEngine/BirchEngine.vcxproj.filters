@@ -89,10 +89,13 @@
     <ClInclude Include="Src\ECS\UILabel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="trivia.h">
+    <ClInclude Include="Src\ClickableComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\ClickableComponent.h">
+    <ClInclude Include="preguntas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\trivia.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -35,7 +35,7 @@ public:
 	{
 		animated = isAnimated;
 
-		Animation idle = Animation(0, 3, 100);
+		Animation idle = Animation(0, 3, 200);
 		Animation walk = Animation(1, 8, 100);
 
 		animations.emplace("Idle", idle);

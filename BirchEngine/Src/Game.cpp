@@ -9,6 +9,7 @@
 #include <sstream>
 #include "SDL_image.h"
 #include "SDL_mixer.h"
+#include "preguntas.h"	
 
 Map* map;
 Manager manager;
@@ -28,6 +29,21 @@ bool Game::isRunning = false;
 bool introShown = false;
 
 TTF_Font* font = nullptr;
+struct Pregunta
+{
+	char enunciado[200];
+	char opciones[4][50];
+	int respuestaCorrecta;
+};
+
+// Declaración de la función para mostrar la pregunta y opciones
+void mostrarPreguntaEnPantalla(const Pregunta& pregunta);
+
+// Declaración de preguntas para cada categoría
+extern Pregunta preguntasGeografia[];
+extern Pregunta preguntasCienciasNaturales[];
+extern Pregunta preguntasMatematicas[];
+extern Pregunta preguntasHistoriaMexico[];
 
 auto& player(manager.addEntity());
 auto& label(manager.addEntity());
@@ -65,12 +81,12 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 		isRunning = true;
 	}
-	
+	/*
 		int totalFrames = 0;
 
 		std::vector<std::string> animationFrames;
 		std::vector<SDL_Texture*> frameTextures;
-		
+
 		for (int i = 1; i <= 999; ++i)
 		{
 			std::string framePath = "assets/frames/ezgif-frame-" + std::to_string(i) + ".png";
@@ -92,7 +108,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 			totalFrames = i;
 		}
-		
+
 		// Obtén la información de la animación para determinar la duración total
 		int frameDuration = 100;  // Ajusta la duración de cada frame en milisegundos
 		int duration = SDL_GetTicks() + frameDuration * frameTextures.size();
@@ -117,7 +133,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		SDL_SetWindowSize(window, width, height);
 		SDL_SetWindowFullscreen(window, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
 		introShown = true;
-	
+
 		assets->AddTexture("menu", "assets/menu1.png");
 
 		// Mostrar la intro
@@ -150,7 +166,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 						mouseY >= (height / 2 + 40) && mouseY <= (height / 2 + 110))
 					{
 
-						break;  
+						break;
 					}
 					if (mouseX >= (width / 2 + 20) && mouseX <= (width / 2 + 160) &&
 						mouseY >= (height / 2 + 40) && mouseY <= (height / 2 + 110))
@@ -160,7 +176,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 					}
 				}
 
-				SDL_Delay(16);  
+				SDL_Delay(16);
 			}
 		}
 
@@ -171,7 +187,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 			SDL_RenderPresent(renderer);
 			SDL_Delay(frameDuration);
 		}
-
+		*/
 
 	if (TTF_Init() == -1)
 	{
@@ -179,7 +195,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	}
 
 	assets->AddTexture("terrain", "assets/terrain_ss.png");
-	assets->AddTexture("player", "assets/player_anims.png");
+	assets->AddTexture("player", "assets/test5.png");
 	assets->AddTexture("projectile", "assets/proj.png");
 	assets->AddTexture("npc", "assets/npc.png");
 	assets->AddFont("arial", "assets/arial.ttf", 16);
@@ -189,11 +205,15 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	map->LoadMap("assets/map.map", 25, 20);
 
-	player.addComponent<TransformComponent>(800.0f, 640.0f, 32 , 32, 4);
+	player.addComponent<TransformComponent>(800.0f, 640.0f, 42, 31.5, 2.5);
 	player.addComponent<SpriteComponent>("player", true);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(groupPlayers);
+
+	
+
+	
 
 	npc.addComponent<TransformComponent>(800.0f, 640.0f, 32, 32, 4);
 	npc.addComponent<SpriteComponent>("npc", true);
@@ -230,6 +250,16 @@ auto& projectiles(manager.getGroup(Game::groupProjectiles));
 auto& npcs(manager.getGroup(Game::groupnpc));
 
 
+void mostrarPreguntaEnPantalla(const Pregunta& pregunta)
+{
+	// Imprime la pregunta y opciones
+	std::cout << pregunta.enunciado << std::endl;
+	for (int i = 0; i < 4; ++i)
+	{
+		std::cout << i + 1 << ". " << pregunta.opciones[i] << std::endl;
+	}
+}
+
 
 void Game::handleNPCInteraction()
 {
@@ -239,34 +269,10 @@ void Game::handleNPCInteraction()
 	textEntity.getComponent<UILabel>().SetLabelText("Hola, ¿crees poder pasar mi examen?", "arial");
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
 	{
-		assets->AddTexture("test", "assets/test.png");
-		SDL_Texture* menuTexture = assets->GetTexture("test");
-
-		if (menuTexture)
-		{
-			std::cout << "Texture loaded successfully!" << std::endl;
-
-			bool waitForClick = true;
-
-			while (waitForClick)
-			{
-				SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
-				SDL_RenderPresent(renderer);
-
-				SDL_PollEvent(&event);
-
-				if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
-				{
-					waitForClick = false;
-				}
-			}
-		}
-		else
-		{
-			std::cerr << "Error loading texture!" << std::endl;
-		}
+		
+		//llama la funcion para las preguntas
+		
 	}
-
 
 	check = true;
 }
@@ -309,6 +315,7 @@ void Game::update()
 	TTF_Font* Sans = TTF_OpenFont("assets/arial.ttf", 24); 
 	SDL_Color White = { 255, 255, 255 };
 	
+
 	for (auto& c : colliders)
 	{
 		SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
@@ -393,6 +400,8 @@ void Game::render()
 		textEntity.getComponent<UILabel>().draw();
 	}
 	check = false;
+
+
 
 	SDL_RenderPresent(renderer);
 }

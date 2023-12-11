@@ -1,11 +1,24 @@
 ﻿  Game.cpp
-C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\Game.cpp(98,16): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
-C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\Game.cpp(100,40): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244: 'argumento': conversión de '_Ty' a 'int'; posible pérdida de datos
+C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:         with
+C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:         [
+C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:             _Ty=double
+C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:         ]
+  (compilando archivo de origen "Src/Game.cpp")
+  C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33):
+  el contexto de creación de instancias de la plantilla (el más antiguo primero) es
+  	C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\Game.cpp(208,8):
+  	Vea la referencia a la creación de una instancia de la función plantilla "T &Entity::addComponent<TransformComponent,float,float,int,double,double>(float &&,float &&,int &&,double &&,double &&)" que se está compilando
+          with
+          [
+              T=TransformComponent
+          ]
+  
 C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
   (compilando archivo de origen "Src/Game.cpp")
   C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33):
   el contexto de creación de instancias de la plantilla (el más antiguo primero) es
-  	C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\Game.cpp(210,12):
+  	C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\Game.cpp(230,12):
   	Vea la referencia a la creación de una instancia de la función plantilla "T &Entity::addComponent<TransformComponent,int&,int&,int&,int&,float&>(int &,int &,int &,int &,float &)" que se está compilando
           with
           [
@@ -15,4 +28,6 @@ C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\
 C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
   (compilando archivo de origen "Src/Game.cpp")
   
+  TextureManager.cpp
+  Generando código...
   BirchEngine.vcxproj -> C:\Users\costco\Documents\Programacion estructurada\juego2\otro\bin\x64\Debug\BirchEngine.exe

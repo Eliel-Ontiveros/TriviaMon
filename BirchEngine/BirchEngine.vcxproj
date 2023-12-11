@@ -160,6 +160,7 @@
     <ClCompile Include="Src\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="preguntas.h" />
     <ClInclude Include="Src\AssetManager.h" />
     <ClInclude Include="Src\ClickableComponent.h" />
     <ClInclude Include="Src\Collision.h" />
@@ -176,8 +177,8 @@
     <ClInclude Include="Src\Game.h" />
     <ClInclude Include="Src\Map.h" />
     <ClInclude Include="Src\TextureManager.h" />
+    <ClInclude Include="Src\trivia.h" />
     <ClInclude Include="Src\Vector2D.h" />
-    <ClInclude Include="trivia.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

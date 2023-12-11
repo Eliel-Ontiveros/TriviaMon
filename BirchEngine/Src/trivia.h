@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 class trivia
@@ -85,3 +86,5 @@ public:
         }
     }
 };
+
+*/

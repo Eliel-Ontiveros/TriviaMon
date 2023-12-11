@@ -29,6 +29,16 @@ public:
 	static AssetManager* assets;
 	static SDL_Rect Message_rect;
 
+	enum Categoria {
+		GEOGRAFIA,
+		// Otras categorías...
+	};
+
+	struct Pregunta {
+		char enunciado[200];
+		char opciones[4][50];
+		int respuestaCorrecta;
+	};
 
 	enum groupLabels : std::size_t
 	{
