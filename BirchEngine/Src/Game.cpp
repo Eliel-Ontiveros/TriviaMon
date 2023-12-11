@@ -9,7 +9,6 @@
 #include <sstream>
 #include "SDL_image.h"
 #include "SDL_mixer.h"
-#include "preguntas.h"	
 
 Map* map;
 Manager manager;
@@ -29,21 +28,6 @@ bool Game::isRunning = false;
 bool introShown = false;
 
 TTF_Font* font = nullptr;
-struct Pregunta
-{
-	char enunciado[200];
-	char opciones[4][50];
-	int respuestaCorrecta;
-};
-
-// Declaración de la función para mostrar la pregunta y opciones
-void mostrarPreguntaEnPantalla(const Pregunta& pregunta);
-
-// Declaración de preguntas para cada categoría
-extern Pregunta preguntasGeografia[];
-extern Pregunta preguntasCienciasNaturales[];
-extern Pregunta preguntasMatematicas[];
-extern Pregunta preguntasHistoriaMexico[];
 
 auto& player(manager.addEntity());
 auto& label(manager.addEntity());
@@ -250,16 +234,6 @@ auto& projectiles(manager.getGroup(Game::groupProjectiles));
 auto& npcs(manager.getGroup(Game::groupnpc));
 
 
-void mostrarPreguntaEnPantalla(const Pregunta& pregunta)
-{
-	// Imprime la pregunta y opciones
-	std::cout << pregunta.enunciado << std::endl;
-	for (int i = 0; i < 4; ++i)
-	{
-		std::cout << i + 1 << ". " << pregunta.opciones[i] << std::endl;
-	}
-}
-
 
 void Game::handleNPCInteraction()
 {
@@ -269,10 +243,34 @@ void Game::handleNPCInteraction()
 	textEntity.getComponent<UILabel>().SetLabelText("Hola, ¿crees poder pasar mi examen?", "arial");
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
 	{
-		
-		//llama la funcion para las preguntas
-		
+		assets->AddTexture("test", "assets/test.png");
+		SDL_Texture* menuTexture = assets->GetTexture("test");
+
+		if (menuTexture)
+		{
+			std::cout << "Texture loaded successfully!" << std::endl;
+
+			bool waitForClick = true;
+
+			while (waitForClick)
+			{
+				SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
+				SDL_RenderPresent(renderer);
+
+				SDL_PollEvent(&event);
+
+				if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
+				{
+					waitForClick = false;
+				}
+			}
+		}
+		else
+		{
+			std::cerr << "Error loading texture!" << std::endl;
+		}
 	}
+
 
 	check = true;
 }
@@ -400,8 +398,6 @@ void Game::render()
 		textEntity.getComponent<UILabel>().draw();
 	}
 	check = false;
-
-
 
 	SDL_RenderPresent(renderer);
 }
