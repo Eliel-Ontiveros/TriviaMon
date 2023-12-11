@@ -28,6 +28,7 @@ public:
 	static SDL_Rect camera;
 	static AssetManager* assets;
 	static SDL_Rect Message_rect;
+	
 
 	enum Categoria {
 		GEOGRAFIA,
@@ -52,9 +53,10 @@ public:
 private:
 
 	int cnt = 0;
-	SDL_Window *window;
+	SDL_Window* window;
 	void handleNPCInteraction();
 	void initializeFont();
 	void cleanupFont();
+	
 
 };

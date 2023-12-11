@@ -10,6 +10,7 @@
 #include "SDL_image.h"
 #include "SDL_mixer.h"
 
+
 Map* map;
 Manager manager;
 
@@ -23,11 +24,14 @@ SDL_Rect Game::Message_rect = { 0, 0, 0, 0 };
 
 AssetManager* Game::assets = new AssetManager(&manager);
 
+
+
 bool check = false;
 bool Game::isRunning = false;
 bool introShown = false;
-
 TTF_Font* font = nullptr;
+
+
 
 auto& player(manager.addEntity());
 auto& label(manager.addEntity());
@@ -173,20 +177,15 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		}
 		*/
 
-	if (TTF_Init() == -1)
-	{
-		std::cout << "Error : SDL_TTF" << std::endl;
-	}
 
 	assets->AddTexture("terrain", "assets/terrain_ss2.png");
 	assets->AddTexture("player", "assets/test5.png");
 	assets->AddTexture("projectile", "assets/proj.png");
-	assets->AddTexture("npc", "assets/npc.png");
+	assets->AddTexture("npc", "assets/doc4.png");
 	assets->AddFont("arial", "assets/arial.ttf", 16);
 	assets->AddTexture("menu", "assets/menu.png");
 
 	map = new Map("terrain", 2, 32);
-
 	map->LoadMap("assets/map.map", 25, 20);
 
 	player.addComponent<TransformComponent>(800.0f, 640.0f, 42, 31.5, 2.5);
@@ -199,8 +198,8 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	
 
-	npc.addComponent<TransformComponent>(800.0f, 640.0f, 32, 32, 4);
-	npc.addComponent<SpriteComponent>("npc", true);
+	npc.addComponent<TransformComponent>(800.0f, 640.0f, 64, 56, 2);
+	npc.addComponent<SpriteComponentt>("npc", true);
 	npc.addComponent<ColliderComponent>("npc");
 	npc.addGroup(groupnpc);
 	SDL_Color white = { 255, 255, 255, 255 };
@@ -219,13 +218,6 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	Vector2D npcPos = npc.getComponent<TransformComponent>().position;
 	textEntity.addComponent<UILabel>(20, 20, "Hello, World!", "arial", white);
 
-	/*
-	assets->CreateProjectile(Vector2D(600, 600), Vector2D(2,0),200, 2, "projectile");
-	assets->CreateProjectile(Vector2D(600, 620), Vector2D(2, 0), 200, 2, "projectile");
-	assets->CreateProjectile(Vector2D(400, 600), Vector2D(2, 1), 200, 2, "projectile");
-	assets->CreateProjectile(Vector2D(600, 600), Vector2D(2, -1), 200, 2, "projectile");
-	assets->AddTexture("menu", "assets/menu.png");
-	*/
 
 }
 
@@ -308,7 +300,6 @@ void Game::update()
 	std::stringstream ss;
 	ss << "Player position: " << playerPos;
 	label.getComponent<UILabel>().SetLabelText(ss.str(), "arial");
-
 	manager.refresh();
 	manager.update();
 
@@ -364,6 +355,7 @@ void Game::render()
 {
 	SDL_RenderClear(renderer);
 
+
 	for (auto& t : tiles)
 	{
 		t->draw();
@@ -404,8 +396,10 @@ void Game::render()
 	SDL_RenderPresent(renderer);
 }
 
+
 void Game::clean()
 {
+
 	TTF_Quit();
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
