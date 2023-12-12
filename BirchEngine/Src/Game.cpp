@@ -9,7 +9,7 @@
 #include <sstream>
 #include "SDL_image.h"
 #include "SDL_mixer.h"
-
+#include "preguntas.h"
 
 Map* map;
 Manager manager;
@@ -18,17 +18,22 @@ SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 SDL_Texture* videoTexture = nullptr;
 
-SDL_Rect Game::camera = { 0,0,1200,650 };
+SDL_Rect Game::camera = { 0,0,800,600 };
 
 SDL_Rect Game::Message_rect = { 0, 0, 0, 0 };
 
 AssetManager* Game::assets = new AssetManager(&manager);
 
-
+int width;  
+int height;
 
 bool check = false;
 bool Game::isRunning = false;
 bool introShown = false;
+bool npc1 = true;
+bool npc22 = true;
+bool npc33 = true;
+bool npc44 = true;
 TTF_Font* font = nullptr;
 
 
@@ -36,9 +41,21 @@ TTF_Font* font = nullptr;
 auto& player(manager.addEntity());
 auto& label(manager.addEntity());
 auto& npc(manager.addEntity());
+auto& npc2(manager.addEntity());
+auto& npc3(manager.addEntity());
+auto& npc4(manager.addEntity());
 auto& textEntity(manager.addEntity());
 auto& playButton(manager.addEntity());
-
+auto& tex(manager.addEntity());
+auto& fixedImage(manager.addEntity());
+auto& text1(manager.addEntity());
+auto& opcion1(manager.addEntity());
+auto& opcion2(manager.addEntity());
+auto& opcion3(manager.addEntity());
+auto& opcion4(manager.addEntity());
+auto& salud(manager.addEntity());
+auto& salud2(manager.addEntity());
+auto& win(manager.addEntity());
 std::string npcMessage;
 
 std::vector<Entity*> buttons;
@@ -69,24 +86,18 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 		isRunning = true;
 	}
+	
 	/*
 		int totalFrames = 0;
 
 		std::vector<std::string> animationFrames;
 		std::vector<SDL_Texture*> frameTextures;
 
-		for (int i = 1; i <= 999; ++i)
+		for (int i = 1; i <= 86; ++i)
 		{
 			std::string framePath = "assets/frames/ezgif-frame-" + std::to_string(i) + ".png";
 			std::cout << "Loading frame: " << framePath << std::endl;
 			SDL_Surface* frameSurface = IMG_Load(framePath.c_str());
-
-			if (!frameSurface)
-			{
-				std::cerr << "Error loading frame: " << framePath << std::endl;
-				// Si no se puede cargar el frame, termina el bucle
-				break;
-			}
 
 			SDL_Texture* frameTexture = SDL_CreateTextureFromSurface(renderer, frameSurface);
 			SDL_FreeSurface(frameSurface);
@@ -164,7 +175,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 					}
 				}
 
-				SDL_Delay(16);
+				
 			}
 		}
 
@@ -177,18 +188,26 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		}
 		*/
 
+	if (TTF_Init() == -1)
+	{
+		std::cout << "Error : SDL_TTF" << std::endl;
+	}
 
 	assets->AddTexture("terrain", "assets/terrain_ss2.png");
 	assets->AddTexture("player", "assets/test5.png");
 	assets->AddTexture("projectile", "assets/proj.png");
 	assets->AddTexture("npc", "assets/doc4.png");
+	assets->AddTexture("npc2", "assets/doc11.png");
+	assets->AddTexture("npc3", "assets/doc12.png");
+	assets->AddTexture("npc4", "assets/doc13.png");
 	assets->AddFont("arial", "assets/arial.ttf", 16);
+	assets->AddFont("pokemon", "assets/Pokemon Classic.ttf", 16);
 	assets->AddTexture("menu", "assets/menu.png");
 
 	map = new Map("terrain", 2, 32);
 	map->LoadMap("assets/map.map", 25, 20);
 
-	player.addComponent<TransformComponent>(800.0f, 640.0f, 42, 31.5, 2.5);
+	player.addComponent<TransformComponent>(760.0f, 1100.0f, 42, 31.5, 2.5);
 	player.addComponent<SpriteComponent>("player", true);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
@@ -196,14 +215,25 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	
 
-	
-
-	npc.addComponent<TransformComponent>(800.0f, 640.0f, 64, 56, 2);
+	npc.addComponent<TransformComponent>(760.0f, 640.0f, 64, 56, 2);
 	npc.addComponent<SpriteComponentt>("npc", true);
 	npc.addComponent<ColliderComponent>("npc");
 	npc.addGroup(groupnpc);
+	npc2.addComponent<TransformComponent>(200.0f, 180.0f, 64, 56, 2);
+	npc2.addComponent<SpriteComponentt>("npc2", true);
+	npc2.addComponent<ColliderComponent>("npc2");
+	npc2.addGroup(groupnpc2);
+	npc3.addComponent<TransformComponent>(1200.0f, 200.0f, 64, 56, 2);
+	npc3.addComponent<SpriteComponentt>("npc3", true);
+	npc3.addComponent<ColliderComponent>("npc3");
+	npc3.addGroup(groupnpc3);
+	npc4.addComponent<TransformComponent>(1250.0f, 1000.0f, 64, 56, 2);
+	npc4.addComponent<SpriteComponentt>("npc4", true);
+	npc4.addComponent<ColliderComponent>("npc4");
+	npc4.addGroup(groupnpc4);
+
 	SDL_Color white = { 255, 255, 255, 255 };
-	
+	SDL_Color black = { 0, 0, 0, 0 };
 	int buttonX = 100;
 	int buttonY = 100;
 	int buttonWidth = 200;
@@ -211,14 +241,26 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	float buttonScale = 1.0f;
 
 	playButton.addComponent<TransformComponent>(buttonX, buttonY, buttonWidth, buttonHeight, buttonScale);
-	playButton.addComponent<SpriteComponent>("menu", true);  // Utiliza el nombre de la textura del menú
+	playButton.addComponent<SpriteComponent>("menu", true); 
 	buttons.push_back(&playButton);
 
-	label.addComponent<UILabel>(10, 10, "Test String", "arial", white);
+	label.addComponent<UILabel>(10, 10, "Test String", "arial", white); 
 	Vector2D npcPos = npc.getComponent<TransformComponent>().position;
-	textEntity.addComponent<UILabel>(20, 20, "Hello, World!", "arial", white);
+	textEntity.addComponent<UILabel>(180, 20, "Hello, World!", "pokemon", white);
+	text1.addComponent<UILabel>(35, 510, "Hello, World!", "pokemon", black);
+	opcion1.addComponent<UILabel>(420, 500, "Hello, World!", "pokemon", black);
+	opcion2.addComponent<UILabel>(620, 500, "Hello, World!", "pokemon", black);
+	opcion3.addComponent<UILabel>(420, 570, "Hello, World!", "pokemon", black);
+	opcion4.addComponent<UILabel>(620, 570, "Hello, World!", "pokemon", black);
+	salud.addComponent<UILabel>(530, 380, "Hello, World!", "pokemon", black);
+	salud2.addComponent<UILabel>(75, 120, "Hello, World!", "pokemon", black);
+	win.addComponent<UILabel>(180, 20, "Hello, World!", "pokemon", white);
+	assets->AddTexture("menu", "assets/menu.png");
 
-
+	fixedImage.addComponent<TransformComponent>(400.0f, 300.0f, 200, 150, 1.0f);
+	fixedImage.addComponent<SpriteComponent>("person", true); 
+	fixedImage.addComponent<ColliderComponent>("fixedImage");
+	fixedImage.addGroup(groupUI);
 }
 
 auto& tiles(manager.getGroup(Game::groupMap));
@@ -226,49 +268,690 @@ auto& players(manager.getGroup(Game::groupPlayers));
 auto& colliders(manager.getGroup(Game::groupColliders));
 auto& projectiles(manager.getGroup(Game::groupProjectiles));
 auto& npcs(manager.getGroup(Game::groupnpc));
+auto& npcs2(manager.getGroup(Game::groupnpc2));
+auto& npcs3(manager.getGroup(Game::groupnpc3));
+auto& npcs4(manager.getGroup(Game::groupnpc4));
 
 
 
 void Game::handleNPCInteraction()
 {
-
 	SDL_Color white = { 255, 255, 255, 255 };
+	int salud_jugador = 20;
+	int salud_oponente = 20;
+	int  restar, daño, op;
 	textEntity.addComponent<TransformComponent>(900.0f, 700.0f, 32, 32, 4);
-	textEntity.getComponent<UILabel>().SetLabelText("Hola, ¿crees poder pasar mi examen?", "arial");
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
+	textEntity.getComponent<UILabel>().SetLabelText("Hola, ¿crees poder pasar mi examen?", "pokemon");
+	win.addComponent<TransformComponent>(900.0f, 700.0f, 32, 32, 4);
+	win.getComponent<UILabel>().SetLabelText("Me ganaste ¿cómo lo hiciste?", "pokemon");
+	if (npc1)
 	{
-		assets->AddTexture("test", "assets/test.png");
-		SDL_Texture* menuTexture = assets->GetTexture("test");
-
-		if (menuTexture)
+		
+		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
 		{
-			std::cout << "Texture loaded successfully!" << std::endl;
 
-			bool waitForClick = true;
+			srand(time(NULL));
 
-			while (waitForClick)
-			{
-				SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
-				SDL_RenderPresent(renderer);
+			assets->AddTexture("test", "assets/test.png");
+			SDL_SetWindowSize(window, width, height);
+			SDL_Texture* menuTexture = assets->GetTexture("test");
 
-				SDL_PollEvent(&event);
-
-				if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
+			if (menuTexture) {
+				//inicio:
+				bool waitForClick = true;
+				bool ti = true;
+				while (waitForClick)
 				{
-					waitForClick = false;
+					if (ti)
+					{
+						op = rand() % 27;
+						ti = false;
+					}
+
+					SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
+					text1.getComponent<UILabel>().SetLabelTextt(preguntasGeografia[op].enunciado, "pokemon");
+					text1.getComponent<UILabel>().draw();
+					opcion1.getComponent<UILabel>().SetLabelTexttt(preguntasGeografia[op].opciones[0], "pokemon");
+					opcion1.getComponent<UILabel>().draw();
+					opcion2.getComponent<UILabel>().SetLabelTexttt(preguntasGeografia[op].opciones[1], "pokemon");
+					opcion2.getComponent<UILabel>().draw();
+					opcion3.getComponent<UILabel>().SetLabelTexttt(preguntasGeografia[op].opciones[2], "pokemon");
+					opcion3.getComponent<UILabel>().draw();
+					opcion4.getComponent<UILabel>().SetLabelTexttt(preguntasGeografia[op].opciones[3], "pokemon");
+					opcion4.getComponent<UILabel>().draw();
+					std::string cadena = std::to_string(salud_jugador);
+					salud.getComponent<UILabel>().SetLabelTexttt(cadena, "pokemon");
+					salud.getComponent<UILabel>().draw();
+					std::string cadena2 = std::to_string(salud_oponente);
+					salud2.getComponent<UILabel>().SetLabelTexttt(cadena2, "pokemon");
+					salud2.getComponent<UILabel>().draw();
+					int res = preguntasGeografia[op].respuestaCorrecta + 1;
+					SDL_RenderPresent(renderer);
+					SDL_PollEvent(&event);
+					if (event.type == SDL_KEYDOWN) {
+						switch (event.key.keysym.sym) {
+						case SDLK_1:
+							if (1 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc1 = false;
+									
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+								}
+							}
+							ti = true;
+							break;
+						case SDLK_2:
+							if (2 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc1 = false;
+									
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+								}
+							}
+							ti = true;
+							break;
+						case SDLK_3:
+							if (3 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc1 = false;
+									
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+
+
+								}
+							}
+							ti = true;
+							break;
+						case SDLK_4:
+							if (4 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc1 = false;
+									
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+								}
+							}
+							ti = true;
+							break;
+						default:
+							break;
+						}
+					}
+					SDL_Delay(16);
 				}
 			}
 		}
-		else
-		{
-			std::cerr << "Error loading texture!" << std::endl;
-		}
+
+
+		check = true;
+
 	}
-
-
-	check = true;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////
+	
+void Game::handleNPCInteractionn()
+{
+	SDL_Color white = { 255, 255, 255, 255 };
+	int salud_jugador = 20;
+	int salud_oponente = 20;
+	int  restar, daño, op;
+	textEntity.addComponent<TransformComponent>(900.0f, 700.0f, 32, 32, 4);
+	textEntity.getComponent<UILabel>().SetLabelText("Hola, ¿crees poder pasar mi examen?", "pokemon");
+	win.addComponent<TransformComponent>(900.0f, 700.0f, 32, 32, 4);
+	win.getComponent<UILabel>().SetLabelText("Me ganaste ¿cómo lo hiciste?", "pokemon");
+	if (npc22)
+	{
+
+		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
+		{
+
+			srand(time(NULL));
+
+			assets->AddTexture("test", "assets/test.png");
+			SDL_SetWindowSize(window, width, height);
+			SDL_Texture* menuTexture = assets->GetTexture("test");
+
+			if (menuTexture) {
+				//inicio:
+				bool waitForClick = true;
+				bool ti2 = true;
+				while (waitForClick)
+				{
+					if (ti2)
+					{
+						op = rand() % 27;
+						ti2 = false;
+					}
+
+					SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
+					text1.getComponent<UILabel>().SetLabelTextt(preguntasCienciasNaturales[op].enunciado, "pokemon");
+					text1.getComponent<UILabel>().draw();
+					opcion1.getComponent<UILabel>().SetLabelTexttt(preguntasCienciasNaturales[op].opciones[0], "pokemon");
+					opcion1.getComponent<UILabel>().draw();
+					opcion2.getComponent<UILabel>().SetLabelTexttt(preguntasCienciasNaturales[op].opciones[1], "pokemon");
+					opcion2.getComponent<UILabel>().draw();
+					opcion3.getComponent<UILabel>().SetLabelTexttt(preguntasCienciasNaturales[op].opciones[2], "pokemon");
+					opcion3.getComponent<UILabel>().draw();
+					opcion4.getComponent<UILabel>().SetLabelTexttt(preguntasCienciasNaturales[op].opciones[3], "pokemon");
+					opcion4.getComponent<UILabel>().draw();
+					std::string cadena = std::to_string(salud_jugador);
+					salud.getComponent<UILabel>().SetLabelTexttt(cadena, "pokemon");
+					salud.getComponent<UILabel>().draw();
+					std::string cadena2 = std::to_string(salud_oponente);
+					salud2.getComponent<UILabel>().SetLabelTexttt(cadena2, "pokemon");
+					salud2.getComponent<UILabel>().draw();
+					int res = preguntasCienciasNaturales[op].respuestaCorrecta + 1;
+					SDL_RenderPresent(renderer);
+					SDL_PollEvent(&event);
+					if (event.type == SDL_KEYDOWN) {
+						switch (event.key.keysym.sym) {
+						case SDLK_1:
+							if (1 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc22 = false;
+
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+								}
+							}
+							ti2 = true;
+							break;
+						case SDLK_2:
+							if (2 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc22 = false;
+
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+								}
+							}
+							ti2 = true;
+							break;
+						case SDLK_3:
+							if (3 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc22 = false;
+
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+
+
+								}
+							}
+							ti2 = true;
+							break;
+						case SDLK_4:
+							if (4 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc22 = false;
+
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+								}
+							}
+							ti2 = true;
+							break;
+						default:
+							break;
+						}
+					}
+					SDL_Delay(16);
+				}
+			}
+		}
+
+
+		check = true;
+
+	}
+}
+
+void Game::handleNPCInteractionnn()
+{
+	SDL_Color white = { 255, 255, 255, 255 };
+	int salud_jugador = 20;
+	int salud_oponente = 20;
+	int  restar, daño, op;
+	textEntity.addComponent<TransformComponent>(900.0f, 700.0f, 32, 32, 4);
+	textEntity.getComponent<UILabel>().SetLabelText("Hola, ¿crees poder pasar mi examen?", "pokemon");
+	win.addComponent<TransformComponent>(900.0f, 700.0f, 32, 32, 4);
+	win.getComponent<UILabel>().SetLabelText("Me ganaste ¿cómo lo hiciste?", "pokemon");
+	if (npc33)
+	{
+
+		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
+		{
+
+			srand(time(NULL));
+
+			assets->AddTexture("test", "assets/test.png");
+			SDL_SetWindowSize(window, width, height);
+			SDL_Texture* menuTexture = assets->GetTexture("test");
+
+			if (menuTexture) {
+				//inicio:
+				bool waitForClick = true;
+				bool ti3 = true;
+				while (waitForClick)
+				{
+					if (ti3)
+					{
+						op = rand() % 27;
+						ti3 = false;
+					}
+
+					SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
+					text1.getComponent<UILabel>().SetLabelTextt(preguntasMatematicas[op].enunciado, "pokemon");
+					text1.getComponent<UILabel>().draw();
+					opcion1.getComponent<UILabel>().SetLabelTexttt(preguntasMatematicas[op].opciones[0], "pokemon");
+					opcion1.getComponent<UILabel>().draw();
+					opcion2.getComponent<UILabel>().SetLabelTexttt(preguntasMatematicas[op].opciones[1], "pokemon");
+					opcion2.getComponent<UILabel>().draw();
+					opcion3.getComponent<UILabel>().SetLabelTexttt(preguntasMatematicas[op].opciones[2], "pokemon");
+					opcion3.getComponent<UILabel>().draw();
+					opcion4.getComponent<UILabel>().SetLabelTexttt(preguntasMatematicas[op].opciones[3], "pokemon");
+					opcion4.getComponent<UILabel>().draw();
+					std::string cadena = std::to_string(salud_jugador);
+					salud.getComponent<UILabel>().SetLabelTexttt(cadena, "pokemon");
+					salud.getComponent<UILabel>().draw();
+					std::string cadena2 = std::to_string(salud_oponente);
+					salud2.getComponent<UILabel>().SetLabelTexttt(cadena2, "pokemon");
+					salud2.getComponent<UILabel>().draw();
+					int res = preguntasMatematicas[op].respuestaCorrecta + 1;
+					SDL_RenderPresent(renderer);
+					SDL_PollEvent(&event);
+					if (event.type == SDL_KEYDOWN) {
+						switch (event.key.keysym.sym) {
+						case SDLK_1:
+							if (1 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc33 = false;
+
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+								}
+							}
+							ti3 = true;
+							break;
+						case SDLK_2:
+							if (2 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc33 = false;
+
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+								}
+							}
+							ti3 = true;
+							break;
+						case SDLK_3:
+							if (3 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc33 = false;
+
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+
+
+								}
+							}
+							ti3 = true;
+							break;
+						case SDLK_4:
+							if (4 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc33 = false;
+
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+								}
+							}
+							ti3 = true;
+							break;
+						default:
+							break;
+						}
+					}
+					SDL_Delay(16);
+				}
+			}
+		}
+
+
+		check = true;
+
+	}
+}
+
+void Game::handleNPCInteractionnnn()
+{
+	SDL_Color white = { 255, 255, 255, 255 };
+	int salud_jugador = 20;
+	int salud_oponente = 20;
+	int  restar, daño, op;
+	textEntity.addComponent<TransformComponent>(900.0f, 700.0f, 32, 32, 4);
+	textEntity.getComponent<UILabel>().SetLabelText("Hola, ¿crees poder pasar mi examen?", "pokemon");
+	win.addComponent<TransformComponent>(900.0f, 700.0f, 32, 32, 4);
+	win.getComponent<UILabel>().SetLabelText("Me ganaste ¿cómo lo hiciste?", "pokemon");
+	if (npc44)
+	{
+
+		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
+		{
+
+			srand(time(NULL));
+
+			assets->AddTexture("test", "assets/test.png");
+			SDL_SetWindowSize(window, width, height);
+			SDL_Texture* menuTexture = assets->GetTexture("test");
+
+			if (menuTexture) {
+				//inicio:
+				bool waitForClick = true;
+				bool ti4 = true;
+				while (waitForClick)
+				{
+					if (ti4)
+					{
+						op = rand() % 27;
+						ti4 = false;
+					}
+
+					SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
+					text1.getComponent<UILabel>().SetLabelTextt(preguntasHistoriaMexico[op].enunciado, "pokemon");
+					text1.getComponent<UILabel>().draw();
+					opcion1.getComponent<UILabel>().SetLabelTexttt(preguntasHistoriaMexico[op].opciones[0], "pokemon");
+					opcion1.getComponent<UILabel>().draw();
+					opcion2.getComponent<UILabel>().SetLabelTexttt(preguntasHistoriaMexico[op].opciones[1], "pokemon");
+					opcion2.getComponent<UILabel>().draw();
+					opcion3.getComponent<UILabel>().SetLabelTexttt(preguntasHistoriaMexico[op].opciones[2], "pokemon");
+					opcion3.getComponent<UILabel>().draw();
+					opcion4.getComponent<UILabel>().SetLabelTexttt(preguntasHistoriaMexico[op].opciones[3], "pokemon");
+					opcion4.getComponent<UILabel>().draw();
+					std::string cadena = std::to_string(salud_jugador);
+					salud.getComponent<UILabel>().SetLabelTexttt(cadena, "pokemon");
+					salud.getComponent<UILabel>().draw();
+					std::string cadena2 = std::to_string(salud_oponente);
+					salud2.getComponent<UILabel>().SetLabelTexttt(cadena2, "pokemon");
+					salud2.getComponent<UILabel>().draw();
+					int res = preguntasHistoriaMexico[op].respuestaCorrecta + 1;
+					SDL_RenderPresent(renderer);
+					SDL_PollEvent(&event);
+					if (event.type == SDL_KEYDOWN) {
+						switch (event.key.keysym.sym) {
+						case SDLK_1:
+							if (1 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc44 = false;
+
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+								}
+							}
+							ti4 = true;
+							break;
+						case SDLK_2:
+							if (2 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc44 = false;
+
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+								}
+							}
+							ti4 = true;
+							break;
+						case SDLK_3:
+							if (3 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc44 = false;
+
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+
+
+								}
+							}
+							ti4 = true;
+							break;
+						case SDLK_4:
+							if (4 == res)
+							{
+								restar = rand() % 5 + 1;
+								salud_oponente -= restar;
+								if (salud_oponente <= 0)
+								{
+									waitForClick = false;
+									npc44 = false;
+
+								}
+
+							}
+							else
+							{
+								restar = rand() % 5 + 1;
+								salud_jugador -= restar;
+								if (salud_jugador <= 0)
+								{
+									waitForClick = false;
+								}
+							}
+							ti4 = true;
+							break;
+						default:
+							break;
+						}
+					}
+					SDL_Delay(16);
+				}
+			}
+		}
+
+
+		check = true;
+
+	}
+}
 
 void Game::handleEvents()
 {
@@ -296,16 +979,15 @@ void Game::update()
 	Vector2D playerPos = player.getComponent<TransformComponent>().position;
 
 	SDL_Rect npcCol = npc.getComponent<ColliderComponent>().collider;
+	SDL_Rect npcCol2 = npc2.getComponent<ColliderComponent>().collider;
+	SDL_Rect npcCol3 = npc3.getComponent<ColliderComponent>().collider;
+	SDL_Rect npcCol4 = npc4.getComponent<ColliderComponent>().collider;
 
-	std::stringstream ss;
-	ss << "Player position: " << playerPos;
-	label.getComponent<UILabel>().SetLabelText(ss.str(), "arial");
 	manager.refresh();
 	manager.update();
 
-	TTF_Font* Sans = TTF_OpenFont("assets/arial.ttf", 24); 
+	TTF_Font* Sans = TTF_OpenFont("assets/arial.ttf", 24);
 	SDL_Color White = { 255, 255, 255 };
-	
 
 	for (auto& c : colliders)
 	{
@@ -315,12 +997,10 @@ void Game::update()
 			player.getComponent<TransformComponent>().position = playerPos;
 		}
 	}
-
 	for (auto& button : buttons)
 	{
 		button->update();
 	}
-
 	for (auto& a : npcs)
 	{
 		if (Collision::AABB(player.getComponent<ColliderComponent>().collider, a->getComponent<ColliderComponent>().collider))
@@ -328,7 +1008,28 @@ void Game::update()
 			handleNPCInteraction();
 		}
 	}
-	
+	for (auto& u : npcs2)
+	{
+		if (Collision::AABB(player.getComponent<ColliderComponent>().collider, u->getComponent<ColliderComponent>().collider))
+		{
+			handleNPCInteractionn();
+		}
+	}
+	for (auto& i : npcs3)
+	{
+		if (Collision::AABB(player.getComponent<ColliderComponent>().collider, i->getComponent<ColliderComponent>().collider))
+		{
+			handleNPCInteractionnn();
+		}
+		for (auto& o : npcs4)
+		{
+			if (Collision::AABB(player.getComponent<ColliderComponent>().collider, o->getComponent<ColliderComponent>().collider))
+			{
+				handleNPCInteractionnnn();
+			}
+		}
+	}
+
 	for (auto& p : projectiles)
 	{
 		if (Collision::AABB(player.getComponent<ColliderComponent>().collider, p->getComponent<ColliderComponent>().collider))
@@ -337,10 +1038,8 @@ void Game::update()
 			p->destroy();
 		}
 	}
-
 	camera.x = static_cast<int>(player.getComponent<TransformComponent>().position.x - 400);
 	camera.y = static_cast<int>(player.getComponent<TransformComponent>().position.y - 320);
-
 	if (camera.x < 0)
 		camera.x = 0;
 	if (camera.y < 0)
@@ -370,26 +1069,42 @@ void Game::render()
 	{
 		a->draw();
 	}
-
+	for (auto& u : npcs2)
+	{
+		u->draw();
+	}
+	for (auto& i : npcs3)
+	{
+		i->draw();
+	}
+	for (auto& o : npcs4)
+	{
+		o->draw();
+	}
 	for (auto& p : players)
 	{
 		p->draw();
 	}
 
-	for (auto& p : projectiles)
-	{
-		p->draw();
-	}
 
-	for (auto& button : buttons)
-	{
-		button->draw();
-	}
 
-	label.draw();
+	fixedImage.draw();
+
+	//label.draw();
 	if (check)
 	{
-		textEntity.getComponent<UILabel>().draw();
+		if (npc1)
+		{
+			textEntity.getComponent<UILabel>().draw();
+			
+		}
+		else
+		{
+			
+			win.getComponent<UILabel>().draw();
+			
+		}
+		
 	}
 	check = false;
 
