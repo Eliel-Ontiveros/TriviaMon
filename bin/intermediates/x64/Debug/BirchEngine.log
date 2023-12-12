@@ -1,14 +1,14 @@
 ﻿  Game.cpp
-C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(116,15): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
-C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(118,39): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(304,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
-C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(292,15): warning C4101: 'daño': variable local sin referencia
-C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(479,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
-C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(467,15): warning C4101: 'daño': variable local sin referencia
-C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(653,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
-C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(641,15): warning C4101: 'daño': variable local sin referencia
-C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(827,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
-C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(815,15): warning C4101: 'daño': variable local sin referencia
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(124,15): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(126,39): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(311,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(298,15): warning C4101: 'daño': variable local sin referencia
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(493,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(483,15): warning C4101: 'daño': variable local sin referencia
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(676,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(666,15): warning C4101: 'daño': variable local sin referencia
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(856,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(846,15): warning C4101: 'daño': variable local sin referencia
 C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244: 'argumento': conversión de '_Ty' a 'int'; posible pérdida de datos
 C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:         with
 C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:         [
@@ -17,7 +17,7 @@ C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:
   (compilando archivo de origen "Src/Game.cpp")
   C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33):
   el contexto de creación de instancias de la plantilla (el más antiguo primero) es
-  	C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(217,8):
+  	C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(225,8):
   	Vea la referencia a la creación de una instancia de la función plantilla "T &Entity::addComponent<TransformComponent,float,float,int,double,double>(float &&,float &&,int &&,double &&,double &&)" que se está compilando
           with
           [
@@ -28,7 +28,7 @@ C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:
   (compilando archivo de origen "Src/Game.cpp")
   C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33):
   el contexto de creación de instancias de la plantilla (el más antiguo primero) es
-  	C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(250,12):
+  	C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(258,12):
   	Vea la referencia a la creación de una instancia de la función plantilla "T &Entity::addComponent<TransformComponent,int&,int&,int&,int&,float&>(int &,int &,int &,int &,float &)" que se está compilando
           with
           [
@@ -46,7 +46,7 @@ C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:
   (compilando archivo de origen "Src/Game.cpp")
   C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33):
   el contexto de creación de instancias de la plantilla (el más antiguo primero) es
-  	C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(267,12):
+  	C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(275,12):
   	Vea la referencia a la creación de una instancia de la función plantilla "T &Entity::addComponent<TransformComponent,float,float,int,int,float>(float &&,float &&,int &&,int &&,float &&)" que se está compilando
           with
           [

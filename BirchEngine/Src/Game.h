@@ -22,13 +22,14 @@ public:
 	void render();
 	void clean();
 
-	static SDL_Renderer *renderer;
+	static SDL_Renderer* renderer;
 	static SDL_Event event;
 	static bool isRunning;
 	static SDL_Rect camera;
 	static AssetManager* assets;
 	static SDL_Rect Message_rect;
-	
+	static int cont_vict;
+
 
 	enum groupLabels : std::size_t
 	{
@@ -54,6 +55,7 @@ private:
 	void handleNPCInteractionnnn();
 	void initializeFont();
 	void cleanupFont();
-	
+
+
 
 };

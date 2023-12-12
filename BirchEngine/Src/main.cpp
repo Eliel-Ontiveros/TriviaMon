@@ -1,9 +1,9 @@
 #include "Game.h"
 
 
-Game *game = nullptr;
+Game* game = nullptr;
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 
 	const int FPS = 60;
@@ -15,11 +15,11 @@ int main(int argc, char *argv[])
 	game = new Game();
 	game->init("GameWindow", 800, 640, false);
 
-	
+
 
 	while (game->running())
 	{
-		
+
 		frameStart = SDL_GetTicks();
 
 		game->handleEvents();
@@ -32,7 +32,6 @@ int main(int argc, char *argv[])
 		{
 			SDL_Delay(frameDelay - frameTime);
 		}
-		
 		
 	}
 

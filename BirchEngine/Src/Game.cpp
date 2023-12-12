@@ -11,6 +11,7 @@
 #include "SDL_mixer.h"
 #include "preguntas.h"
 #include "AudioManager.h"
+#include <set>
 
 Map* map;
 Manager manager;
@@ -27,8 +28,15 @@ AssetManager* Game::assets = new AssetManager(&manager);
 
 AudioManager audioManager;
 
+std::set<int> preguntasUtilizadas_Geo;
+std::set<int> preguntasUtilizadas_Mate;
+std::set<int> preguntasUtilizadas_Hist;
+std::set<int> preguntasUtilizadas_Ciencia;
+
+
 int width;
 int height;
+int Game::cont_vict = 0;
 
 bool check = false;
 bool Game::isRunning = false;
@@ -281,8 +289,6 @@ auto& npcs2(manager.getGroup(Game::groupnpc2));
 auto& npcs3(manager.getGroup(Game::groupnpc3));
 auto& npcs4(manager.getGroup(Game::groupnpc4));
 
-
-
 void Game::handleNPCInteraction()
 {
 
@@ -294,6 +300,7 @@ void Game::handleNPCInteraction()
 	textEntity.getComponent<UILabel>().SetLabelText("Hola, ¿crees poder pasar mi examen?", "pokemon");
 	win.addComponent<TransformComponent>(900.0f, 700.0f, 32, 32, 4);
 	win.getComponent<UILabel>().SetLabelText("Me ganaste ¿cómo lo hiciste?", "pokemon");
+
 	if (npc1)
 	{
 
@@ -316,9 +323,13 @@ void Game::handleNPCInteraction()
 				{
 					if (ti)
 					{
-						op = rand() % 27;
+						do {
+							op = rand() % 27;
+						} while (preguntasUtilizadas_Geo.count(op) > 0);
+						preguntasUtilizadas_Geo.insert(op);
 						ti = false;
 					}
+
 					SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
 					text1.getComponent<UILabel>().SetLabelTextt(preguntasGeografia[op].enunciado, "pokemon");
 					text1.getComponent<UILabel>().draw();
@@ -350,6 +361,7 @@ void Game::handleNPCInteraction()
 								{
 									waitForClick = false;
 									npc1 = false;
+									cont_vict++;
 
 								}
 
@@ -374,6 +386,7 @@ void Game::handleNPCInteraction()
 								{
 									waitForClick = false;
 									npc1 = false;
+									cont_vict++;
 
 								}
 
@@ -398,6 +411,7 @@ void Game::handleNPCInteraction()
 								{
 									waitForClick = false;
 									npc1 = false;
+									cont_vict++;
 
 								}
 
@@ -424,6 +438,7 @@ void Game::handleNPCInteraction()
 								{
 									waitForClick = false;
 									npc1 = false;
+									cont_vict++;
 
 								}
 
@@ -442,6 +457,7 @@ void Game::handleNPCInteraction()
 						default:
 							break;
 						}
+
 					}
 					SDL_Delay(16);
 				}
@@ -454,8 +470,8 @@ void Game::handleNPCInteraction()
 
 	}
 
-}
 
+}
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -474,9 +490,9 @@ void Game::handleNPCInteractionn()
 
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
 		{
+			srand(time(NULL));
 			Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
 			audioManager.reproducirMusica("assets/Panorama.mp3");
-			srand(time(NULL));
 
 			assets->AddTexture("test", "assets/test.png");
 			SDL_SetWindowSize(window, width, height);
@@ -490,146 +506,155 @@ void Game::handleNPCInteractionn()
 				{
 					if (ti2)
 					{
-						op = rand() % 27;
+						do {
+							op = rand() % 27;
+						} while (preguntasUtilizadas_Ciencia.count(op) > 0);
+						preguntasUtilizadas_Ciencia.insert(op);
 						ti2 = false;
-					}
-					SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
-					text1.getComponent<UILabel>().SetLabelTextt(preguntasCienciasNaturales[op].enunciado, "pokemon");
-					text1.getComponent<UILabel>().draw();
-					opcion1.getComponent<UILabel>().SetLabelTexttt(preguntasCienciasNaturales[op].opciones[0], "pokemon");
-					opcion1.getComponent<UILabel>().draw();
-					opcion2.getComponent<UILabel>().SetLabelTexttt(preguntasCienciasNaturales[op].opciones[1], "pokemon");
-					opcion2.getComponent<UILabel>().draw();
-					opcion3.getComponent<UILabel>().SetLabelTexttt(preguntasCienciasNaturales[op].opciones[2], "pokemon");
-					opcion3.getComponent<UILabel>().draw();
-					opcion4.getComponent<UILabel>().SetLabelTexttt(preguntasCienciasNaturales[op].opciones[3], "pokemon");
-					opcion4.getComponent<UILabel>().draw();
-					std::string cadena = std::to_string(salud_jugador);
-					salud.getComponent<UILabel>().SetLabelTexttt(cadena, "pokemon");
-					salud.getComponent<UILabel>().draw();
-					std::string cadena2 = std::to_string(salud_oponente);
-					salud2.getComponent<UILabel>().SetLabelTexttt(cadena2, "pokemon");
-					salud2.getComponent<UILabel>().draw();
-					int res = preguntasCienciasNaturales[op].respuestaCorrecta + 1;
-					SDL_RenderPresent(renderer);
-					SDL_PollEvent(&event);
-					if (event.type == SDL_KEYDOWN) {
-						switch (event.key.keysym.sym) {
-						case SDLK_1:
-							if (1 == res)
-							{
-								restar = rand() % 5 + 1;
-								salud_oponente -= restar;
-								if (salud_oponente <= 0)
+
+						SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
+						text1.getComponent<UILabel>().SetLabelTextt(preguntasCienciasNaturales[op].enunciado, "pokemon");
+						text1.getComponent<UILabel>().draw();
+						opcion1.getComponent<UILabel>().SetLabelTexttt(preguntasCienciasNaturales[op].opciones[0], "pokemon");
+						opcion1.getComponent<UILabel>().draw();
+						opcion2.getComponent<UILabel>().SetLabelTexttt(preguntasCienciasNaturales[op].opciones[1], "pokemon");
+						opcion2.getComponent<UILabel>().draw();
+						opcion3.getComponent<UILabel>().SetLabelTexttt(preguntasCienciasNaturales[op].opciones[2], "pokemon");
+						opcion3.getComponent<UILabel>().draw();
+						opcion4.getComponent<UILabel>().SetLabelTexttt(preguntasCienciasNaturales[op].opciones[3], "pokemon");
+						opcion4.getComponent<UILabel>().draw();
+						std::string cadena = std::to_string(salud_jugador);
+						salud.getComponent<UILabel>().SetLabelTexttt(cadena, "pokemon");
+						salud.getComponent<UILabel>().draw();
+						std::string cadena2 = std::to_string(salud_oponente);
+						salud2.getComponent<UILabel>().SetLabelTexttt(cadena2, "pokemon");
+						salud2.getComponent<UILabel>().draw();
+						int res = preguntasCienciasNaturales[op].respuestaCorrecta + 1;
+						SDL_RenderPresent(renderer);
+						SDL_PollEvent(&event);
+						if (event.type == SDL_KEYDOWN) {
+							switch (event.key.keysym.sym) {
+							case SDLK_1:
+								if (1 == res)
 								{
-									waitForClick = false;
-									npc22 = false;
+									restar = rand() % 5 + 1;
+									salud_oponente -= restar;
+									if (salud_oponente <= 0)
+									{
+										waitForClick = false;
+										npc22 = false;
+										cont_vict++;
+
+									}
 
 								}
-
-							}
-							else
-							{
-								restar = rand() % 5 + 1;
-								salud_jugador -= restar;
-								if (salud_jugador <= 0)
+								else
 								{
-									waitForClick = false;
+									restar = rand() % 5 + 1;
+									salud_jugador -= restar;
+									if (salud_jugador <= 0)
+									{
+										waitForClick = false;
+									}
 								}
-							}
-							ti2 = true;
-							break;
-						case SDLK_2:
-							if (2 == res)
-							{
-								restar = rand() % 5 + 1;
-								salud_oponente -= restar;
-								if (salud_oponente <= 0)
+								ti2 = true;
+								break;
+							case SDLK_2:
+								if (2 == res)
 								{
-									waitForClick = false;
-									npc22 = false;
+									restar = rand() % 5 + 1;
+									salud_oponente -= restar;
+									if (salud_oponente <= 0)
+									{
+										waitForClick = false;
+										npc22 = false;
+										cont_vict++;
 
-								}
-
-							}
-							else
-							{
-								restar = rand() % 5 + 1;
-								salud_jugador -= restar;
-								if (salud_jugador <= 0)
-								{
-									waitForClick = false;
-								}
-							}
-							ti2 = true;
-							break;
-						case SDLK_3:
-							if (3 == res)
-							{
-								restar = rand() % 5 + 1;
-								salud_oponente -= restar;
-								if (salud_oponente <= 0)
-								{
-									waitForClick = false;
-									npc22 = false;
+									}
 
 								}
-
-							}
-							else
-							{
-								restar = rand() % 5 + 1;
-								salud_jugador -= restar;
-								if (salud_jugador <= 0)
+								else
 								{
-									waitForClick = false;
+									restar = rand() % 5 + 1;
+									salud_jugador -= restar;
+									if (salud_jugador <= 0)
+									{
+										waitForClick = false;
+									}
+								}
+								ti2 = true;
+								break;
+							case SDLK_3:
+								if (3 == res)
+								{
+									restar = rand() % 5 + 1;
+									salud_oponente -= restar;
+									if (salud_oponente <= 0)
+									{
+										waitForClick = false;
+										npc22 = false;
+										cont_vict++;
 
+									}
 
 								}
-							}
-							ti2 = true;
-							break;
-						case SDLK_4:
-							if (4 == res)
-							{
-								restar = rand() % 5 + 1;
-								salud_oponente -= restar;
-								if (salud_oponente <= 0)
+								else
 								{
-									waitForClick = false;
-									npc22 = false;
+									restar = rand() % 5 + 1;
+									salud_jugador -= restar;
+									if (salud_jugador <= 0)
+									{
+										waitForClick = false;
+
+
+									}
+								}
+								ti2 = true;
+								break;
+							case SDLK_4:
+								if (4 == res)
+								{
+									restar = rand() % 5 + 1;
+									salud_oponente -= restar;
+									if (salud_oponente <= 0)
+									{
+										waitForClick = false;
+										npc22 = false;
+										cont_vict++;
+
+									}
 
 								}
-
-							}
-							else
-							{
-								restar = rand() % 5 + 1;
-								salud_jugador -= restar;
-								if (salud_jugador <= 0)
+								else
 								{
-									waitForClick = false;
+									restar = rand() % 5 + 1;
+									salud_jugador -= restar;
+									if (salud_jugador <= 0)
+									{
+										waitForClick = false;
+									}
 								}
+
+								ti2 = true;
+								break;
+
+							default:
+								break;
 							}
-							ti2 = true;
-							break;
-						default:
-							break;
 						}
+
+
+						SDL_Delay(16);
 					}
-
-					Mix_HaltMusic();
-
-					SDL_Delay(16);
 				}
 			}
+
+			audioManager.reproducirMusica("assets/SourGrapes-Mapa.mp3");
+
+
+			check = true;
+
 		}
-
-		audioManager.reproducirMusica("assets/SourGrapes-Mapa.mp3");
-
-
-		check = true;
-
 	}
 }
 
@@ -648,9 +673,9 @@ void Game::handleNPCInteractionnn()
 
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
 		{
+			srand(time(NULL));
 			Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
 			audioManager.reproducirMusica("assets/Panorama.mp3");
-			srand(time(NULL));
 
 			assets->AddTexture("test", "assets/test.png");
 			SDL_SetWindowSize(window, width, height);
@@ -664,7 +689,10 @@ void Game::handleNPCInteractionnn()
 				{
 					if (ti3)
 					{
-						op = rand() % 27;
+						do {
+							op = rand() % 27;
+						} while (preguntasUtilizadas_Mate.count(op) > 0);
+						preguntasUtilizadas_Mate.insert(op);
 						ti3 = false;
 					}
 					SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
@@ -698,6 +726,7 @@ void Game::handleNPCInteractionnn()
 								{
 									waitForClick = false;
 									npc33 = false;
+									cont_vict++;
 
 								}
 
@@ -722,6 +751,7 @@ void Game::handleNPCInteractionnn()
 								{
 									waitForClick = false;
 									npc33 = false;
+									cont_vict++;
 
 								}
 
@@ -746,6 +776,7 @@ void Game::handleNPCInteractionnn()
 								{
 									waitForClick = false;
 									npc33 = false;
+									cont_vict++;
 
 								}
 
@@ -772,6 +803,7 @@ void Game::handleNPCInteractionnn()
 								{
 									waitForClick = false;
 									npc33 = false;
+									cont_vict++;
 
 								}
 
@@ -792,7 +824,6 @@ void Game::handleNPCInteractionnn()
 						}
 					}
 
-					Mix_HaltMusic();
 
 					SDL_Delay(16);
 				}
@@ -822,9 +853,9 @@ void Game::handleNPCInteractionnnn()
 
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
 		{
+			srand(time(NULL));
 			Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
 			audioManager.reproducirMusica("assets/Panorama.mp3");
-			srand(time(NULL));
 
 			assets->AddTexture("test", "assets/test.png");
 			SDL_SetWindowSize(window, width, height);
@@ -838,7 +869,10 @@ void Game::handleNPCInteractionnnn()
 				{
 					if (ti4)
 					{
-						op = rand() % 27;
+						do {
+							op = rand() % 27;
+						} while (preguntasUtilizadas_Hist.count(op) > 0);
+						preguntasUtilizadas_Hist.insert(op);
 						ti4 = false;
 					}
 
@@ -873,6 +907,7 @@ void Game::handleNPCInteractionnnn()
 								{
 									waitForClick = false;
 									npc44 = false;
+									cont_vict++;
 
 								}
 
@@ -897,6 +932,7 @@ void Game::handleNPCInteractionnnn()
 								{
 									waitForClick = false;
 									npc44 = false;
+									cont_vict++;
 
 								}
 
@@ -921,6 +957,7 @@ void Game::handleNPCInteractionnnn()
 								{
 									waitForClick = false;
 									npc44 = false;
+									cont_vict++;
 
 								}
 
@@ -947,6 +984,7 @@ void Game::handleNPCInteractionnnn()
 								{
 									waitForClick = false;
 									npc44 = false;
+									cont_vict++;
 
 								}
 
@@ -967,7 +1005,6 @@ void Game::handleNPCInteractionnnn()
 						}
 					}
 
-					Mix_HaltMusic();
 
 					SDL_Delay(16);
 				}
@@ -999,7 +1036,6 @@ void Game::handleEvents()
 	}
 
 }
-
 
 
 void Game::update()
@@ -1035,28 +1071,45 @@ void Game::update()
 	{
 		if (Collision::AABB(player.getComponent<ColliderComponent>().collider, a->getComponent<ColliderComponent>().collider))
 		{
-			handleNPCInteraction();
+			if (npc1)
+			{
+				handleNPCInteraction();
+			}
+
 		}
 	}
 	for (auto& u : npcs2)
 	{
 		if (Collision::AABB(player.getComponent<ColliderComponent>().collider, u->getComponent<ColliderComponent>().collider))
 		{
-			handleNPCInteractionn();
+			if (npc22)
+			{
+				handleNPCInteractionn();
+			}
+
 		}
 	}
 	for (auto& i : npcs3)
 	{
 		if (Collision::AABB(player.getComponent<ColliderComponent>().collider, i->getComponent<ColliderComponent>().collider))
 		{
-			handleNPCInteractionnn();
+			if (npc22)
+			{
+				handleNPCInteractionnn();
+			}
+
 		}
-		for (auto& o : npcs4)
+
+	}
+	for (auto& o : npcs4)
+	{
+		if (Collision::AABB(player.getComponent<ColliderComponent>().collider, o->getComponent<ColliderComponent>().collider))
 		{
-			if (Collision::AABB(player.getComponent<ColliderComponent>().collider, o->getComponent<ColliderComponent>().collider))
+			if (npc22)
 			{
 				handleNPCInteractionnnn();
 			}
+
 		}
 	}
 
@@ -1123,18 +1176,7 @@ void Game::render()
 	//label.draw();
 	if (check)
 	{
-		if (npc1)
-		{
-			textEntity.getComponent<UILabel>().draw();
-
-		}
-		else
-		{
-
-			win.getComponent<UILabel>().draw();
-
-		}
-
+		textEntity.getComponent<UILabel>().draw();
 	}
 	check = false;
 
@@ -1146,9 +1188,12 @@ void Game::clean()
 {
 
 	TTF_Quit();
+	preguntasUtilizadas_Geo.clear();
+	preguntasUtilizadas_Ciencia.clear();
+	preguntasUtilizadas_Hist.clear();
+	preguntasUtilizadas_Mate.clear();
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 	IMG_Quit();
-
 }

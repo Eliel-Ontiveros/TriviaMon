@@ -42,7 +42,7 @@ struct Pregunta preguntasGeografia[] = {
 struct Pregunta preguntasCienciasNaturales[] = {
 	{"¿Que animal es conocido como el 'Rey de la Selva'?", {"Elefante", "Leon", "Tigre", "Oso"}, 1},
 	{"¿Cuantas patas tiene una araña?", {"4", "6", "8", "10"}, 2},
-	{"¿Cuál de los siguientes es un planeta del sistema solar?", {"Luna", "Júpiter", "Marte", "Saturno"}, 1},
+	{"¿Cuál de los siguientes no es planeta del sistema solar?", {"Luna", "Júpiter", "Marte", "Saturno"}, 0},
 	{"¿Qué parte de la planta absorbe agua y nutrientes del suelo?", {"Hojas", "Raíces", "Tallo", "Flores"}, 1},
 	{"¿Cuál es la unidad básica de la vida?", {"Átomo", "Molécula", "Célula", "Organismo"}, 2},
 	{"¿Qué gas necesitan las plantas para realizar la fotosíntesis?", {"Oxígeno", "Dióxido de carbono", "Nitrógeno", "Hidrógeno"}, 1},
@@ -89,7 +89,7 @@ struct Pregunta preguntasMatematicas[] = {
 	{"¿Cuantas diagonales tiene un cuadrado?", {"1", "2", "3", "4"}, 1},
 	{"Si un tren viaja a 60 km/h, ¿Cuantos km recorre en 3 horas?", {"160", "170", "145", "180"}, 3},
 	{"¿Cuantos kilometros hay en una milla?", {"2.347", "1.862", "1.604", "1.504"}, 2},
-	{"Si un triangulo tiene un lado de 9 cm, ¿Cuanto mide su area?", {"82", "91", "100", "97"}, 1},
+	{"Si un cuadrado tiene un lado de 9 cm, ¿Cuanto mide su area?", {"82", "91", "100", "97"}, 1},
 	{"¿Cuantos minutos hay en una hora?", {"60", "100", "59", "70"}, 0},
 	{"Si un rectangulo tiene lados de 7 cm y 10 cm, ¿Cuanto mide su area?", {"63", "77", "70", "73"}, 2},
 	{"¿Cuantas semanas hay en un año?", {"54", "47", "52", "55"}, 2},
