@@ -1,4 +1,5 @@
-﻿  Game.cpp
+﻿  Collision.cpp
+  Game.cpp
 C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(124,15): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
 C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(126,39): warning C4018: '<': no coinciden signed/unsigned
 C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(311,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
@@ -53,4 +54,12 @@ C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:
               T=TransformComponent
           ]
   
-  BirchEngine.vcxproj -> C:\Users\Eliel\source\TriviaMon\bin\x64\Debug\BirchEngine.exe
+  Map.cpp
+  TextureManager.cpp
+  main.cpp
+  Generando código...
+  LINK : no se encontró C:\Users\Eliel\source\TriviaMon\bin\x64\Debug\BirchEngine.exe o no lo generó el último vínculo incremental; ejecutando vínculo completo
+Game.obj : error LNK2005: ya se definió "class Game * game" (?game@@3PEAVGame@@EA) en Collision.obj
+main.obj : error LNK2005: ya se definió "class Game * game" (?game@@3PEAVGame@@EA) en Collision.obj
+Map.obj : error LNK2005: ya se definió "class Game * game" (?game@@3PEAVGame@@EA) en Collision.obj
+C:\Users\Eliel\source\TriviaMon\bin\x64\Debug\BirchEngine.exe : fatal error LNK1169: se encontraron uno o más símbolos definidos simultáneamente
