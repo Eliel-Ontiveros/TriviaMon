@@ -30,24 +30,18 @@ public:
 	static SDL_Rect Message_rect;
 	
 
-	enum Categoria {
-		GEOGRAFIA,
-		// Otras categorías...
-	};
-
-	struct Pregunta {
-		char enunciado[200];
-		char opciones[4][50];
-		int respuestaCorrecta;
-	};
-
 	enum groupLabels : std::size_t
 	{
 		groupnpc,
+		groupnpc2,
+		groupnpc3,
+		groupnpc4,
 		groupMap,
 		groupPlayers,
 		groupColliders,
-		groupProjectiles
+		groupProjectiles,
+		grouptex,
+		groupUI
 	};
 
 private:
@@ -55,6 +49,9 @@ private:
 	int cnt = 0;
 	SDL_Window* window;
 	void handleNPCInteraction();
+	void handleNPCInteractionn();
+	void handleNPCInteractionnn();
+	void handleNPCInteractionnnn();
 	void initializeFont();
 	void cleanupFont();
 	
