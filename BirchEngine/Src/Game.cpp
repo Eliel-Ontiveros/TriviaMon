@@ -10,6 +10,7 @@
 #include "SDL_image.h"
 #include "SDL_mixer.h"
 #include "preguntas.h"
+#include "AudioManager.h"
 
 Map* map;
 Manager manager;
@@ -24,7 +25,9 @@ SDL_Rect Game::Message_rect = { 0, 0, 0, 0 };
 
 AssetManager* Game::assets = new AssetManager(&manager);
 
-int width;  
+AudioManager audioManager;
+
+int width;
 int height;
 
 bool check = false;
@@ -86,112 +89,116 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 		isRunning = true;
 	}
-	
-	/*
-		int totalFrames = 0;
 
-		std::vector<std::string> animationFrames;
-		std::vector<SDL_Texture*> frameTextures;
 
-		for (int i = 1; i <= 86; ++i)
-		{
-			std::string framePath = "assets/frames/ezgif-frame-" + std::to_string(i) + ".png";
-			std::cout << "Loading frame: " << framePath << std::endl;
-			SDL_Surface* frameSurface = IMG_Load(framePath.c_str());
+	int totalFrames = 0;
 
-			SDL_Texture* frameTexture = SDL_CreateTextureFromSurface(renderer, frameSurface);
-			SDL_FreeSurface(frameSurface);
+	std::vector<std::string> animationFrames;
+	std::vector<SDL_Texture*> frameTextures;
 
-			frameTextures.push_back(frameTexture);
-			animationFrames.push_back(framePath);
+	for (int i = 1; i <= 86; ++i)
+	{
+		std::string framePath = "assets/frames/ezgif-frame-" + std::to_string(i) + ".png";
+		std::cout << "Loading frame: " << framePath << std::endl;
+		SDL_Surface* frameSurface = IMG_Load(framePath.c_str());
 
-			totalFrames = i;
-		}
+		SDL_Texture* frameTexture = SDL_CreateTextureFromSurface(renderer, frameSurface);
+		SDL_FreeSurface(frameSurface);
 
-		// Obtén la información de la animación para determinar la duración total
-		int frameDuration = 100;  // Ajusta la duración de cada frame en milisegundos
-		int duration = SDL_GetTicks() + frameDuration * frameTextures.size();
+		frameTextures.push_back(frameTexture);
+		animationFrames.push_back(framePath);
 
-		while (!introShown && SDL_GetTicks() < duration)
-		{
-			for (SDL_Texture* frameTexture : frameTextures)
-			{
-				SDL_RenderCopy(renderer, frameTexture, NULL, NULL);
-				SDL_RenderPresent(renderer);
-				SDL_Delay(frameDuration);
-			}
-		}
+		totalFrames = i;
+	}
 
-		// Libera las texturas
-		for (SDL_Texture* frameTexture : frameTextures)
-		{
-			SDL_DestroyTexture(frameTexture);
-		}
+	// Obtén la información de la animación para determinar la duración total
+	int frameDuration = 100;  // Ajusta la duración de cada frame en milisegundos
+	int duration = SDL_GetTicks() + frameDuration * frameTextures.size();
 
-		// Restaura el tamaño de la ventana del juego principal
-		SDL_SetWindowSize(window, width, height);
-		SDL_SetWindowFullscreen(window, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
-		introShown = true;
-
-		assets->AddTexture("menu", "assets/menu1.png");
-
-		// Mostrar la intro
+	while (!introShown && SDL_GetTicks() < duration)
+	{
 		for (SDL_Texture* frameTexture : frameTextures)
 		{
 			SDL_RenderCopy(renderer, frameTexture, NULL, NULL);
 			SDL_RenderPresent(renderer);
 			SDL_Delay(frameDuration);
 		}
+	}
 
-		// Mostrar la imagen del menú después de la intro
-		SDL_Texture* menuTexture = assets->GetTexture("menu");
-		if (menuTexture)
+	// Libera las texturas
+	for (SDL_Texture* frameTexture : frameTextures)
+	{
+		SDL_DestroyTexture(frameTexture);
+	}
+
+	// Restaura el tamaño de la ventana del juego principal
+	SDL_SetWindowSize(window, width, height);
+	SDL_SetWindowFullscreen(window, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+	introShown = true;
+
+	assets->AddTexture("menu", "assets/menu1.png");
+
+	// Mostrar la intro
+	for (SDL_Texture* frameTexture : frameTextures)
+	{
+		SDL_RenderCopy(renderer, frameTexture, NULL, NULL);
+		SDL_RenderPresent(renderer);
+		SDL_Delay(frameDuration);
+	}
+
+	// Mostrar la imagen del menú después de la intro
+	SDL_Texture* menuTexture = assets->GetTexture("menu");
+	if (menuTexture)
+	{
+		audioManager.reproducirMusica("assets/SourGrapes-Mapa.mp3");
+		while (true)  // Bucle hasta que se haga clic
 		{
-			while (true)  // Bucle hasta que se haga clic
+
+			SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
+
+			SDL_RenderPresent(renderer);
+
+			SDL_PollEvent(&event);
+
+			if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
 			{
-				SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
+				int mouseX, mouseY;
+				SDL_GetMouseState(&mouseX, &mouseY);
 
-				SDL_RenderPresent(renderer);
-
-				SDL_PollEvent(&event);
-
-				if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
+				// Comprobar si el clic ocurrió en el medio de la pantalla
+				if (mouseX >= (width / 2 - 150) && mouseX <= (width / 2 + -10) &&
+					mouseY >= (height / 2 + 40) && mouseY <= (height / 2 + 110))
 				{
-					int mouseX, mouseY;
-					SDL_GetMouseState(&mouseX, &mouseY);
-
-					// Comprobar si el clic ocurrió en el medio de la pantalla
-					if (mouseX >= (width / 2 - 150) && mouseX <= (width / 2 + -10) &&
-						mouseY >= (height / 2 + 40) && mouseY <= (height / 2 + 110))
-					{
-
-						break;
-					}
-					if (mouseX >= (width / 2 + 20) && mouseX <= (width / 2 + 160) &&
-						mouseY >= (height / 2 + 40) && mouseY <= (height / 2 + 110))
-					{
-						Game::isRunning = false;
-						break;
-					}
+					audioManager.reproducirMusica("assets/Click.mp3");
+					break;
 				}
-
-				
+				if (mouseX >= (width / 2 + 20) && mouseX <= (width / 2 + 160) &&
+					mouseY >= (height / 2 + 40) && mouseY <= (height / 2 + 110))
+				{
+					Game::isRunning = false;
+					break;
+				}
 			}
-		}
 
-		// Mostrar la intro
-		for (SDL_Texture* frameTexture : frameTextures)
-		{
-			SDL_RenderCopy(renderer, frameTexture, NULL, NULL);
-			SDL_RenderPresent(renderer);
-			SDL_Delay(frameDuration);
+
 		}
-		*/
+		Mix_HaltMusic();
+	}
+
+	// Mostrar la intro
+	for (SDL_Texture* frameTexture : frameTextures)
+	{
+		SDL_RenderCopy(renderer, frameTexture, NULL, NULL);
+		SDL_RenderPresent(renderer);
+		SDL_Delay(frameDuration);
+	}
 
 	if (TTF_Init() == -1)
 	{
 		std::cout << "Error : SDL_TTF" << std::endl;
 	}
+
+	audioManager.reproducirMusica("assets/SourGrapes-Mapa.mp3");
 
 	assets->AddTexture("terrain", "assets/terrain_ss2.png");
 	assets->AddTexture("player", "assets/test5.png");
@@ -213,7 +220,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(groupPlayers);
 
-	
+
 
 	npc.addComponent<TransformComponent>(760.0f, 640.0f, 64, 56, 2);
 	npc.addComponent<SpriteComponentt>("npc", true);
@@ -241,10 +248,10 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	float buttonScale = 1.0f;
 
 	playButton.addComponent<TransformComponent>(buttonX, buttonY, buttonWidth, buttonHeight, buttonScale);
-	playButton.addComponent<SpriteComponent>("menu", true); 
+	playButton.addComponent<SpriteComponent>("menu", true);
 	buttons.push_back(&playButton);
 
-	label.addComponent<UILabel>(10, 10, "Test String", "arial", white); 
+	label.addComponent<UILabel>(10, 10, "Test String", "arial", white);
 	Vector2D npcPos = npc.getComponent<TransformComponent>().position;
 	textEntity.addComponent<UILabel>(180, 20, "Hello, World!", "pokemon", white);
 	text1.addComponent<UILabel>(35, 510, "Hello, World!", "pokemon", black);
@@ -258,9 +265,11 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	assets->AddTexture("menu", "assets/menu.png");
 
 	fixedImage.addComponent<TransformComponent>(400.0f, 300.0f, 200, 150, 1.0f);
-	fixedImage.addComponent<SpriteComponent>("person", true); 
+	fixedImage.addComponent<SpriteComponent>("person", true);
 	fixedImage.addComponent<ColliderComponent>("fixedImage");
 	fixedImage.addGroup(groupUI);
+
+
 }
 
 auto& tiles(manager.getGroup(Game::groupMap));
@@ -276,6 +285,7 @@ auto& npcs4(manager.getGroup(Game::groupnpc4));
 
 void Game::handleNPCInteraction()
 {
+
 	SDL_Color white = { 255, 255, 255, 255 };
 	int salud_jugador = 20;
 	int salud_oponente = 20;
@@ -286,12 +296,14 @@ void Game::handleNPCInteraction()
 	win.getComponent<UILabel>().SetLabelText("Me ganaste ¿cómo lo hiciste?", "pokemon");
 	if (npc1)
 	{
-		
+
+
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
 		{
 
 			srand(time(NULL));
-
+			Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+			audioManager.reproducirMusica("assets/Panorama.mp3");
 			assets->AddTexture("test", "assets/test.png");
 			SDL_SetWindowSize(window, width, height);
 			SDL_Texture* menuTexture = assets->GetTexture("test");
@@ -307,7 +319,6 @@ void Game::handleNPCInteraction()
 						op = rand() % 27;
 						ti = false;
 					}
-
 					SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
 					text1.getComponent<UILabel>().SetLabelTextt(preguntasGeografia[op].enunciado, "pokemon");
 					text1.getComponent<UILabel>().draw();
@@ -339,7 +350,7 @@ void Game::handleNPCInteraction()
 								{
 									waitForClick = false;
 									npc1 = false;
-									
+
 								}
 
 							}
@@ -363,7 +374,7 @@ void Game::handleNPCInteraction()
 								{
 									waitForClick = false;
 									npc1 = false;
-									
+
 								}
 
 							}
@@ -387,7 +398,7 @@ void Game::handleNPCInteraction()
 								{
 									waitForClick = false;
 									npc1 = false;
-									
+
 								}
 
 							}
@@ -413,7 +424,7 @@ void Game::handleNPCInteraction()
 								{
 									waitForClick = false;
 									npc1 = false;
-									
+
 								}
 
 							}
@@ -437,15 +448,17 @@ void Game::handleNPCInteraction()
 			}
 		}
 
+		audioManager.reproducirMusica("assets/SourGrapes-Mapa.mp3");
 
 		check = true;
 
 	}
+
 }
 
 
 /////////////////////////////////////////////////////////////////////////////////
-	
+
 void Game::handleNPCInteractionn()
 {
 	SDL_Color white = { 255, 255, 255, 255 };
@@ -461,7 +474,8 @@ void Game::handleNPCInteractionn()
 
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
 		{
-
+			Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+			audioManager.reproducirMusica("assets/Panorama.mp3");
 			srand(time(NULL));
 
 			assets->AddTexture("test", "assets/test.png");
@@ -479,7 +493,6 @@ void Game::handleNPCInteractionn()
 						op = rand() % 27;
 						ti2 = false;
 					}
-
 					SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
 					text1.getComponent<UILabel>().SetLabelTextt(preguntasCienciasNaturales[op].enunciado, "pokemon");
 					text1.getComponent<UILabel>().draw();
@@ -604,10 +617,15 @@ void Game::handleNPCInteractionn()
 							break;
 						}
 					}
+
+					Mix_HaltMusic();
+
 					SDL_Delay(16);
 				}
 			}
 		}
+
+		audioManager.reproducirMusica("assets/SourGrapes-Mapa.mp3");
 
 
 		check = true;
@@ -630,7 +648,8 @@ void Game::handleNPCInteractionnn()
 
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
 		{
-
+			Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+			audioManager.reproducirMusica("assets/Panorama.mp3");
 			srand(time(NULL));
 
 			assets->AddTexture("test", "assets/test.png");
@@ -648,7 +667,6 @@ void Game::handleNPCInteractionnn()
 						op = rand() % 27;
 						ti3 = false;
 					}
-
 					SDL_RenderCopy(renderer, menuTexture, NULL, NULL);
 					text1.getComponent<UILabel>().SetLabelTextt(preguntasMatematicas[op].enunciado, "pokemon");
 					text1.getComponent<UILabel>().draw();
@@ -773,10 +791,15 @@ void Game::handleNPCInteractionnn()
 							break;
 						}
 					}
+
+					Mix_HaltMusic();
+
 					SDL_Delay(16);
 				}
 			}
 		}
+
+		audioManager.reproducirMusica("assets/SourGrapes-Mapa.mp3");
 
 
 		check = true;
@@ -799,7 +822,8 @@ void Game::handleNPCInteractionnnn()
 
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
 		{
-
+			Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+			audioManager.reproducirMusica("assets/Panorama.mp3");
 			srand(time(NULL));
 
 			assets->AddTexture("test", "assets/test.png");
@@ -942,11 +966,17 @@ void Game::handleNPCInteractionnnn()
 							break;
 						}
 					}
+
+					Mix_HaltMusic();
+
 					SDL_Delay(16);
 				}
 			}
 		}
 
+
+
+		audioManager.reproducirMusica("assets/SourGrapes-Mapa.mp3");
 
 		check = true;
 
@@ -955,25 +985,25 @@ void Game::handleNPCInteractionnnn()
 
 void Game::handleEvents()
 {
-	
+
 	SDL_PollEvent(&event);
 
 	switch (event.type)
 	{
-	case SDL_QUIT :
+	case SDL_QUIT:
 		isRunning = false;
 
 		break;
 	default:
 		break;
 	}
-	
+
 }
 
 
 
 void Game::update()
-{	
+{
 
 	SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
 	Vector2D playerPos = player.getComponent<TransformComponent>().position;
@@ -1096,15 +1126,15 @@ void Game::render()
 		if (npc1)
 		{
 			textEntity.getComponent<UILabel>().draw();
-			
+
 		}
 		else
 		{
-			
+
 			win.getComponent<UILabel>().draw();
-			
+
 		}
-		
+
 	}
 	check = false;
 

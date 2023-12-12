@@ -29,10 +29,30 @@ public:
 		SDL_FreeSurface(surf);
 
 		SDL_QueryTexture(labelTexture, nullptr, nullptr, &position.w, &position.h);
+
+	}
+	void SetLabelTextt(std::string text, std::string font)
+	{
+		SDL_Surface* surf = TTF_RenderText_Blended_Wrapped(Game::assets->GetFont(font), text.c_str(), textColour, 350);
+		labelTexture = SDL_CreateTextureFromSurface(Game::renderer, surf);
+		SDL_FreeSurface(surf);
+
+		SDL_QueryTexture(labelTexture, nullptr, nullptr, &position.w, &position.h);
+
+	}
+	void SetLabelTexttt(std::string text, std::string font)
+	{
+		SDL_Surface* surf = TTF_RenderText_Blended_Wrapped(Game::assets->GetFont(font), text.c_str(), textColour, 150);
+		labelTexture = SDL_CreateTextureFromSurface(Game::renderer, surf);
+		SDL_FreeSurface(surf);
+
+		SDL_QueryTexture(labelTexture, nullptr, nullptr, &position.w, &position.h);
+
 	}
 
 	void draw() override
 	{
+		SDL_Rect offsetPosition = { position.x - Game::camera.x, position.y - Game::camera.y, position.w, position.h };
 		SDL_RenderCopy(Game::renderer, labelTexture, nullptr, &position);
 	}
 

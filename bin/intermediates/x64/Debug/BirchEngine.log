@@ -1,31 +1,56 @@
 ﻿  Game.cpp
-C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244: 'argumento': conversión de '_Ty' a 'int'; posible pérdida de datos
-C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:         with
-C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:         [
-C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:             _Ty=double
-C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:         ]
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(116,15): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(118,39): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(304,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(292,15): warning C4101: 'daño': variable local sin referencia
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(479,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(467,15): warning C4101: 'daño': variable local sin referencia
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(653,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(641,15): warning C4101: 'daño': variable local sin referencia
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(827,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(815,15): warning C4101: 'daño': variable local sin referencia
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244: 'argumento': conversión de '_Ty' a 'int'; posible pérdida de datos
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:         with
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:         [
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:             _Ty=double
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:         ]
   (compilando archivo de origen "Src/Game.cpp")
-  C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33):
+  C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33):
   el contexto de creación de instancias de la plantilla (el más antiguo primero) es
-  	C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\Game.cpp(191,8):
+  	C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(217,8):
   	Vea la referencia a la creación de una instancia de la función plantilla "T &Entity::addComponent<TransformComponent,float,float,int,double,double>(float &&,float &&,int &&,double &&,double &&)" que se está compilando
           with
           [
               T=TransformComponent
           ]
   
-C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
   (compilando archivo de origen "Src/Game.cpp")
-  C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33):
+  C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33):
   el contexto de creación de instancias de la plantilla (el más antiguo primero) es
-  	C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\Game.cpp(213,12):
+  	C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(250,12):
   	Vea la referencia a la creación de una instancia de la función plantilla "T &Entity::addComponent<TransformComponent,int&,int&,int&,int&,float&>(int &,int &,int &,int &,float &)" que se está compilando
           with
           [
               T=TransformComponent
           ]
   
-C:\Users\costco\Documents\Programacion estructurada\juego2\otro\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
   (compilando archivo de origen "Src/Game.cpp")
   
-  BirchEngine.vcxproj -> C:\Users\costco\Documents\Programacion estructurada\juego2\otro\bin\x64\Debug\BirchEngine.exe
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244: 'argumento': conversión de '_Ty' a 'int'; posible pérdida de datos
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:         with
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:         [
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:             _Ty=float
+C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33): warning C4244:         ]
+  (compilando archivo de origen "Src/Game.cpp")
+  C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\ECS\ECS.h(93,33):
+  el contexto de creación de instancias de la plantilla (el más antiguo primero) es
+  	C:\Users\Eliel\source\TriviaMon\BirchEngine\Src\Game.cpp(267,12):
+  	Vea la referencia a la creación de una instancia de la función plantilla "T &Entity::addComponent<TransformComponent,float,float,int,int,float>(float &&,float &&,int &&,int &&,float &&)" que se está compilando
+          with
+          [
+              T=TransformComponent
+          ]
+  
+  BirchEngine.vcxproj -> C:\Users\Eliel\source\TriviaMon\bin\x64\Debug\BirchEngine.exe
