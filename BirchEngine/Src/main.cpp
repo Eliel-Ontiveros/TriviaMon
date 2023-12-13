@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 	int frameTime;
 
 	game = new Game();
-	game->init("GameWindow", 800, 640, false);
+	game->init("GameWindow", 800, 640, true);
 
 
 
@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 		{
 			SDL_Delay(frameDelay - frameTime);
 		}
-		
+
 	}
 
 	game->clean();
